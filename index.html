@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simple Painter</title>
+  <link rel="stylesheet" type="text/css" href="css/normalize.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" type="text/css" href="css/colorpicker.css">
+
+  <script src="tools/pencil/pencil.js"></script>
+
+  <script src="js/colorpicker.js"></script>
+  <script src="js/point.js"></script>
+  <script src="js/painter.js"></script>
+  <script src="js/main.js"></script>
+</head>
+<body>
+  <nav id="nav">
+    <div></div>
+    <div id="tools">
+      <span class="tool fa fa-pencil" data-tool="pencil"></span>
+    </div>
+    <div></div>
+  </nav>
+  <div id="main">
+    <div id="toolbox">
+      <div id="properties"></div>
+    </div>
+    <div id="container">
+      <div id="drawarea">
+        <div class="transparent-bg layer"></div>
+        <canvas id="layer1" class="layer"></canvas>
+        <canvas id="oplayer" class="layer"></canvas>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+$grey-bg: darken(white, 25%);
+
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-flow: column;
+}
+
+#nav {
+  display: flex;
+  justify-content: space-between;
+  background-color: #000;
+}
+
+#tools {
+  display: flex;
+  .tool {
+    color: white;
+    font-size: 35px;
+    height: 40px;
+    width: 40px;
+    padding: 5px 20px;
+    text-align: center;
+    &.active {
+      background-color: #777;
+    }
+  }
+}
+
+#main {
+  flex-grow: 1;
+  display: flex;
+}
+
+#toolbox {
+  flex: 1 0 0;
+  box-sizing: border-box;
+  padding: 10px;
+  display: flex;
+  flex-flow: column;
+}
+
+#properties {
+  flex: 1 0 0;
+}
+
+#container {
+  background-color: $grey-bg;
+  flex: 5 0 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  #drawarea {
+    position: relative;
+    height: 400px;
+    width: 600px;
+    .layer {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+    }
+    #oplayer {
+      z-index: 5;
+    }
+  }
+}
+
+.transparent-bg {
+  background: url('../img/trans-bg.png');
+}
