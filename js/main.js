@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  opdom.addEventListener("mousedown", painter.onDown);
-  opdom.addEventListener("mousemove", painter.onMove);
-  opdom.addEventListener("mouseup", painter.onUp);
+  window.addEventListener("mousedown", painter.onDown);
+  window.addEventListener("mousemove", painter.onMove);
+  window.addEventListener("mouseup", painter.onUp);
 });

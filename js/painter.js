@@ -12,6 +12,7 @@ Painter = (function() {
     this.tools = {};
     this.toolNow = "";
     this.opctx = opctx;
+    this.oppos = getDOMpos(this.opctx.canvas);
     this.dctx = dctx;
     this.opctx.lineCap = "round";
     this.opctx.lineJoin = "round";
@@ -21,8 +22,9 @@ Painter = (function() {
   }
 
   Painter.prototype.onDown = function(e) {
+    e.preventDefault();
     if (this.toolNow in this.tools) {
-      return this.tools[this.toolNow].onDown(getMouseDOM(e));
+      return this.tools[this.toolNow].onDown(getMouseDOM(e, this.oppos));
     }
     else {
       return console.log("Tool", this.toolNow, "doens't exist");
@@ -30,8 +32,9 @@ Painter = (function() {
   };
 
   Painter.prototype.onMove = function(e) {
+    e.preventDefault();
     if (this.toolNow in this.tools) {
-      return this.tools[this.toolNow].onMove(getMouseDOM(e));
+      return this.tools[this.toolNow].onMove(getMouseDOM(e, this.oppos));
     }
     else {
       return console.log("Tool", this.toolNow, "doens't exist");
@@ -39,8 +42,9 @@ Painter = (function() {
   };
 
   Painter.prototype.onUp = function(e) {
+    e.preventDefault();
     if (this.toolNow in this.tools) {
-      return this.tools[this.toolNow].onUp(getMouseDOM(e));
+      return this.tools[this.toolNow].onUp(getMouseDOM(e, this.oppos));
     }
     else {
       return console.log("Tool", this.toolNow, "doens't exist");

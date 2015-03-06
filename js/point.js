@@ -8,9 +8,8 @@ Point = (function() {
   return Point;
 })();
 
-getMouseDOM = function(e) {
+getMouseDOM = function(e, dompos) {
   var dompos, x, y;
-  dompos = getDOMpos(e.target);
   x = e.clientX - dompos.x;
   y = e.clientY - dompos.y;
   return new Point(x, y);
