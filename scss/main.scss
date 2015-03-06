@@ -15,16 +15,20 @@ body {
   background-color: #000;
 }
 
+.tool {
+  color: white;
+  font-size: 35px;
+  height: 40px;
+  width: 40px;
+  padding: 5px 5px;
+  text-align: center;
+}
+
 #tools {
   display: flex;
   .tool {
-    color: white;
-    font-size: 35px;
-    height: 40px;
-    width: 40px;
     padding: 5px 20px;
-    text-align: center;
-    &.active {
+    &.active{
       background-color: #777;
     }
   }

@@ -1,7 +1,10 @@
+'use strict';
+
 var Pencil;
 
 Pencil = (function() {
-  Pencil = function(opctx, dctx) {
+  Pencil = function(painter, opctx, dctx) {
+    this.painter = painter;
     this.opctx = opctx;
     this.dctx = dctx;
     this.lineWidth = 5;
@@ -10,6 +13,7 @@ Pencil = (function() {
   }
 
   Pencil.prototype.onDown = function(pos) {
+    this.painter.addHis();
     this.dctx.strokeStyle = this.color;
     this.dctx.lineWidth = this.lineWidth;
     this.isDown = true;
@@ -26,9 +30,11 @@ Pencil = (function() {
   }
 
   Pencil.prototype.onUp = function(pos) {
-    this.dctx.lineTo(pos.x, pos.y);
-    this.dctx.stroke();
-    this.isDown = false;
+    if (this.isDown) {
+      this.dctx.lineTo(pos.x, pos.y);
+      this.dctx.stroke();
+      this.isDown = false;
+    }
   }
 
   return Pencil;

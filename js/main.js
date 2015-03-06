@@ -1,3 +1,5 @@
+'use strict';
+
 document.addEventListener('DOMContentLoaded', function() {
   var ddom, opdom, painter;
 
@@ -28,6 +30,16 @@ document.addEventListener('DOMContentLoaded', function() {
       painter.changeTool(dom.dataset.tool);
     });
   }
+
+  var refreshButton = document.querySelector('#refresh-button');
+  refreshButton.addEventListener("click", function(e) {
+    painter.clear();
+  });
+
+  var undoButton = document.querySelector('#undo-button');
+  undoButton.addEventListener("click", function(e) {
+    painter.undo();
+  });
 
   window.addEventListener("mousedown", painter.onDown);
   window.addEventListener("mousemove", painter.onMove);
