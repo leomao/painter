@@ -8,13 +8,11 @@ Pencil = (function() {
     this.opctx = opctx;
     this.dctx = dctx;
     this.lineWidth = 5;
-    this.color = '#000000';
     this.isDown = false;
   }
 
   Pencil.prototype.onDown = function(pos) {
     this.painter.addHis();
-    this.dctx.strokeStyle = this.color;
     this.dctx.lineWidth = this.lineWidth;
     this.isDown = true;
     this.dctx.beginPath();

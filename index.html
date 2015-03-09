@@ -6,14 +6,7 @@
   <link rel="stylesheet" type="text/css" href="css/normalize.css">
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="css/main.css">
-  <link rel="stylesheet" type="text/css" href="css/colorpicker.css">
 
-  <script src="tools/pencil/pencil.js"></script>
-
-  <script src="js/colorpicker.js"></script>
-  <script src="js/point.js"></script>
-  <script src="js/painter.js"></script>
-  <script src="js/main.js"></script>
 </head>
 <body>
   <nav id="nav">
@@ -28,7 +21,14 @@
   </nav>
   <div id="main">
     <div id="toolbox">
-      <div id="properties"></div>
+      <div id="properties">
+        <div class="color-wrapper">
+          Front Color: <div class="colorpicker front" value="#000"></div>
+        </div>
+        <div class="color-wrapper">
+          Back Color: <div class="colorpicker back" value="#FFF"></div>
+        </div>
+      </div>
     </div>
     <div id="container">
       <div id="drawarea">
@@ -38,5 +38,17 @@
       </div>
     </div>
   </div>
+
+  <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+
+  <script src="js/jqColorPicker.min.js"></script>
+
+  <script src="js/util.js"></script>
+
+  <script src="tools/pencil/pencil.js"></script>
+
+  <script src="js/painter.js"></script>
+  <script src="js/main.js"></script>
+
 </body>
 </html>

@@ -51,6 +51,18 @@ body {
   flex: 1 0 0;
 }
 
+.color-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.colorpicker {
+  width: 30px;
+  height: 30px;
+  border: 3px solid;
+}
+
 #container {
   background-color: $grey-bg;
   flex: 5 0 0;

@@ -25,8 +25,8 @@ Painter = (function() {
 
   Painter.prototype.onDown = function(e) {
     this.oppos = getDOMpos(this.opctx.canvas);
-    e.preventDefault();
     if (this.toolNow in this.tools) {
+      e.preventDefault();
       if (e.target == this.opctx.canvas)
         return this.tools[this.toolNow].onDown(getMouseDOM(e, this.oppos));
     }
@@ -37,8 +37,8 @@ Painter = (function() {
 
   Painter.prototype.onMove = function(e) {
     this.oppos = getDOMpos(this.opctx.canvas);
-    e.preventDefault();
     if (this.toolNow in this.tools) {
+      e.preventDefault();
       return this.tools[this.toolNow].onMove(getMouseDOM(e, this.oppos));
     }
     else {
@@ -48,9 +48,9 @@ Painter = (function() {
 
   Painter.prototype.onUp = function(e) {
     this.oppos = getDOMpos(this.opctx.canvas);
-    e.preventDefault();
     if (this.toolNow in this.tools) {
-        return this.tools[this.toolNow].onUp(getMouseDOM(e, this.oppos));
+      e.preventDefault();
+      return this.tools[this.toolNow].onUp(getMouseDOM(e, this.oppos));
     }
     else {
       return console.log("Tool", this.toolNow, "doens't exist");
@@ -65,6 +65,14 @@ Painter = (function() {
     if (toolname in this.tools) {
       this.toolNow = toolname;
     }
+  };
+
+  Painter.prototype.setFrontColor = function(color) {
+    this.dctx.strokeStyle = getStyle(color);
+  };
+
+  Painter.prototype.setBackColor = function(color) {
+    this.dctx.fillStyle = getStyle(color);
   };
 
   Painter.prototype.undo = function() {
@@ -83,6 +91,7 @@ Painter = (function() {
   };
 
   Painter.prototype.clear = function() {
+    this.addHis();
     this.dctx.clearRect(0, 0,
                         this.dctx.canvas.width, this.dctx.canvas.height);
   };

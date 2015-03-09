@@ -1,6 +1,6 @@
-var Point, getDOMpos, getMouseDOM;
+'use strict';
 
-Point = (function() {
+var Point = (function() {
   function Point(x1, y1) {
     this.x = x1;
     this.y = y1;
@@ -8,14 +8,14 @@ Point = (function() {
   return Point;
 })();
 
-getMouseDOM = function(e, dompos) {
+var getMouseDOM = function(e, dompos) {
   var dompos, x, y;
   x = e.clientX - dompos.x;
   y = e.clientY - dompos.y;
   return new Point(x, y);
 };
 
-getDOMpos = function(dom) {
+var getDOMpos = function(dom) {
   var x, y;
   x = 0;
   y = 0;
@@ -26,3 +26,10 @@ getDOMpos = function(dom) {
   }
   return new Point(x, y);
 };
+
+var getStyle = function(color) {
+  var rgb = color.RND.rgb;
+  var sty = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' +
+    color.alpha + ')';
+  return sty;
+}

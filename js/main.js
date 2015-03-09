@@ -44,4 +44,35 @@ document.addEventListener('DOMContentLoaded', function() {
   window.addEventListener("mousedown", painter.onDown);
   window.addEventListener("mousemove", painter.onMove);
   window.addEventListener("mouseup", painter.onUp);
+
+  $('.colorpicker.front').colorPicker({
+    color: '#000',
+    GPU: true, // use transform: translate3d
+    // opacity: true, // enable / disable alpha slider
+    renderCallback: function($elm, toggled) {
+      painter.setFrontColor(this.color.colors);
+    }, // this === instance; $elm: the input field;toggle === true -> just appeared; false -> opposite; else -> is rendering on pointer move
+    // toggled true/false can for example be used to check if the $elm has a certain className and then hide alpha,...
+    buidCallback: function($elm) {}, // this === instance; $elm: the UI
+    scrollResize: true, // toggle for reposition colorPicker on window.resize/scroll
+    gap: 4, // gap to right and bottom edge of view port if repositioned to fit
+    preventFocus: false, // prevents default on focus of input fields (e.g. no keyboard on mobile)
+    body: document.body, // the element where the events are attached to (touchstart, mousedown, pointerdown, focus, click, change)
+  });
+
+  $('.colorpicker.back').colorPicker({
+    color: '#FFF',
+    GPU: true, // use transform: translate3d
+    // opacity: true, // enable / disable alpha slider
+    renderCallback: function($elm, toggled) {
+      painter.setBackColor(this.color.colors);
+    }, // this === instance; $elm: the input field;toggle === true -> just appeared; false -> opposite; else -> is rendering on pointer move
+    // toggled true/false can for example be used to check if the $elm has a certain className and then hide alpha,...
+    buidCallback: function($elm) {}, // this === instance; $elm: the UI
+    scrollResize: true, // toggle for reposition colorPicker on window.resize/scroll
+    gap: 4, // gap to right and bottom edge of view port if repositioned to fit
+    preventFocus: false, // prevents default on focus of input fields (e.g. no keyboard on mobile)
+    body: document.body, // the element where the events are attached to (touchstart, mousedown, pointerdown, focus, click, change)
+  });
+
 });
