@@ -1,10 +1,15 @@
 'use strict';
 
 var Point = (function() {
-  function Point(x1, y1) {
+  var Point = function(x1, y1) {
     this.x = x1;
     this.y = y1;
   }
+
+  Point.prototype.subtract = function(p) {
+    return new Point(this.x - p.x, this.y - p.y);
+  }
+
   return Point;
 })();
 
@@ -27,7 +32,7 @@ var getDOMpos = function(dom) {
   return new Point(x, y);
 };
 
-var getStyle = function(color) {
+var getColor = function(color) {
   var rgb = color.RND.rgb;
   var sty = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' +
     color.alpha + ')';

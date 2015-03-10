@@ -13,6 +13,12 @@
     <div></div>
     <div id="tools">
       <span class="tool fa fa-pencil" data-tool="pencil"></span>
+      <span class="tool" data-tool="rect">
+        <img src="tools/rect/rect.svg" />
+      </span>
+      <span class="tool" data-tool="line">
+        <img src="tools/line/line.svg" />
+      </span>
     </div>
     <div>
       <span class="tool fa fa-undo" id="undo-button"></span>
@@ -22,30 +28,46 @@
   <div id="main">
     <div id="toolbox">
       <div id="properties">
-        <div class="color-wrapper">
-          Front Color: <div class="colorpicker front" value="#000"></div>
+        <div class="front-color">
+          Front Color:
+          <div class="color-wrapper">
+            <div class="colorpicker front" value="#000"></div>
+          </div>
         </div>
-        <div class="color-wrapper">
-          Back Color: <div class="colorpicker back" value="#FFF"></div>
+        <div class="back-color">
+          Back Color:
+          <div class="color-wrapper">
+            <div class="colorpicker back" value="#FFF"></div>
+          </div>
+        </div>
+        <div class="line-width">
+          <div class="line-width-wrapper">
+            Line Width:
+            <input type="number" value="5" id="line-width-number"></input>
+          </div>
+          <input type="range" value="5" id="line-width-range"
+            min="1" max="200"></input>
         </div>
       </div>
     </div>
     <div id="container">
       <div id="drawarea">
         <div class="transparent-bg layer"></div>
-        <canvas id="layer1" class="layer"></canvas>
+        <canvas id="dlayer" class="layer"></canvas>
+        <canvas id="blayer" class="layer"></canvas>
         <canvas id="oplayer" class="layer"></canvas>
       </div>
     </div>
   </div>
 
   <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
-
-  <script src="js/jqColorPicker.min.js"></script>
+  <script type="text/javascript" src="js/jqColorPicker.min.js"></script>
 
   <script src="js/util.js"></script>
 
   <script src="tools/pencil/pencil.js"></script>
+  <script src="tools/rect/rect.js"></script>
+  <script src="tools/line/line.js"></script>
 
   <script src="js/painter.js"></script>
   <script src="js/main.js"></script>

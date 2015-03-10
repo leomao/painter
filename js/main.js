@@ -1,18 +1,22 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', function() {
-  var ddom, opdom, painter;
-
-  opdom = document.getElementById('oplayer');
-  ddom = document.getElementById('layer1');
+  var opdom = document.getElementById('oplayer'); // operation
+  var bdom = document.getElementById('blayer'); // buffer
+  var ddom = document.getElementById('dlayer'); // draw
   opdom.width = parseInt(window.getComputedStyle(opdom).width);
   opdom.height = parseInt(window.getComputedStyle(opdom).height);
+  bdom.width = parseInt(window.getComputedStyle(bdom).width);
+  bdom.height = parseInt(window.getComputedStyle(bdom).height);
   ddom.width = parseInt(window.getComputedStyle(ddom).width);
   ddom.height = parseInt(window.getComputedStyle(ddom).height);
 
-  painter = new Painter(opdom.getContext('2d'), ddom.getContext('2d'));
+  var painter = new Painter(opdom.getContext('2d'), bdom.getContext('2d'),
+                            ddom.getContext('2d'));
 
   painter.registerTool("pencil", Pencil);
+  painter.registerTool("rect", Rect);
+  painter.registerTool("line", Line);
 
   var tools = document.querySelectorAll('#tools .tool');
   tools = Array.prototype.slice.call(tools);
@@ -21,18 +25,19 @@ document.addEventListener('DOMContentLoaded', function() {
     for (var d of tools) {
       d.classList.remove('active');
     }
-    d.classList.add('active');
+    dom.classList.add('active');
   }
 
   for (var dom of tools) {
     dom.addEventListener('click', function(e) {
-      activeTool(dom);
-      painter.changeTool(dom.dataset.tool);
+      activeTool(this);
+      painter.changeTool(this.dataset.tool);
     });
   }
 
   var refreshButton = document.querySelector('#refresh-button');
   refreshButton.addEventListener("click", function(e) {
+    painter.addHis();
     painter.clear();
   });
 
@@ -41,17 +46,32 @@ document.addEventListener('DOMContentLoaded', function() {
     painter.undo();
   });
 
-  window.addEventListener("mousedown", painter.onDown);
-  window.addEventListener("mousemove", painter.onMove);
-  window.addEventListener("mouseup", painter.onUp);
+  var widthrange = document.getElementById('line-width-range');
+  var widthnumber = document.getElementById('line-width-number');
+
+  widthrange.addEventListener('input', function(e) {
+    widthnumber.value = widthrange.value;
+    painter.getStyle();
+  });
+  widthnumber.addEventListener('change', function(e) {
+    var value = parseInt(widthnumber.value);
+    if (isNaN(value))
+      widthnumber.value = widthrange.value;
+    else if (value > widthrange.max)
+      widthnumber.value = widthrange.value =  widthrange.max;
+    else if (value < widthrange.min)
+      widthnumber.value = widthrange.value =  widthrange.min;
+    else
+      widthrange.value = widthnumber.value;
+    painter.getStyle();
+  });
 
   $('.colorpicker.front').colorPicker({
     color: '#000',
     GPU: true, // use transform: translate3d
-    // opacity: true, // enable / disable alpha slider
     renderCallback: function($elm, toggled) {
-      painter.setFrontColor(this.color.colors);
-    }, // this === instance; $elm: the input field;toggle === true -> just appeared; false -> opposite; else -> is rendering on pointer move
+      painter.getStyle();
+    },
     // toggled true/false can for example be used to check if the $elm has a certain className and then hide alpha,...
     buidCallback: function($elm) {}, // this === instance; $elm: the UI
     scrollResize: true, // toggle for reposition colorPicker on window.resize/scroll
@@ -63,16 +83,36 @@ document.addEventListener('DOMContentLoaded', function() {
   $('.colorpicker.back').colorPicker({
     color: '#FFF',
     GPU: true, // use transform: translate3d
-    // opacity: true, // enable / disable alpha slider
     renderCallback: function($elm, toggled) {
-      painter.setBackColor(this.color.colors);
-    }, // this === instance; $elm: the input field;toggle === true -> just appeared; false -> opposite; else -> is rendering on pointer move
-    // toggled true/false can for example be used to check if the $elm has a certain className and then hide alpha,...
+      painter.getStyle();
+    },
     buidCallback: function($elm) {}, // this === instance; $elm: the UI
     scrollResize: true, // toggle for reposition colorPicker on window.resize/scroll
     gap: 4, // gap to right and bottom edge of view port if repositioned to fit
     preventFocus: false, // prevents default on focus of input fields (e.g. no keyboard on mobile)
     body: document.body, // the element where the events are attached to (touchstart, mousedown, pointerdown, focus, click, change)
+  });
+
+  painter.getStyle = function() {
+    var width = parseInt(widthrange.value);
+    var fcolor = document.querySelector('.colorpicker.front').style.backgroundColor;
+    var bcolor = document.querySelector('.colorpicker.back').style.backgroundColor;
+    this.setLineWidth(width);
+    this.setFrontColor(fcolor);
+    this.setBackColor(bcolor);
+  }
+
+  var container = document.getElementById('container'); // operation
+  container.addEventListener("mousedown", painter.onDown);
+  container.addEventListener("mousemove", painter.onMove);
+  container.addEventListener("mouseup", painter.onUp);
+  window.addEventListener("keydown", function(e) {
+    if (e.shiftKey)
+      painter.shiftDown();
+  });
+  window.addEventListener("keyup", function(e) {
+    if (!e.shiftKey)
+      painter.shiftUp();
   });
 
 });

@@ -7,42 +7,45 @@ var bind = function(fn, self) {
 var Painter;
 
 Painter = (function() {
-  function Painter(opctx, dctx) {
-    this.onUp = bind(this.onUp, this);
+  function Painter(opctx, bctx, dctx) {
     this.onMove = bind(this.onMove, this);
     this.onDown = bind(this.onDown, this);
+    this.onUp = bind(this.onUp, this);
+    this.shiftDown = bind(this.shiftDown, this);
+    this.shiftUp = bind(this.shiftUp, this);
     this.tools = {};
     this.toolNow = "";
     this.opctx = opctx;
-    this.oppos = getDOMpos(this.opctx.canvas);
+    this.bctx = bctx;
     this.dctx = dctx;
-    this.opctx.lineCap = "round";
-    this.opctx.lineJoin = "round";
-    this.dctx.lineCap = "round";
-    this.dctx.lineJoin = "round";
+    var clear = function() {
+      this.clearRect(0, 0,
+                     this.canvas.width, this.canvas.height);
+    }
+    this.opctx.clear = clear;
+    this.bctx.clear = clear;
+    this.dctx.clear = clear;
+    this.dctx.fillStyle = '#FFF';
+    this.bctx.fillStyle = '#FFF';
     this.his = new Array();
+    this.setLineWidth(5);
   }
 
   Painter.prototype.onDown = function(e) {
     this.oppos = getDOMpos(this.opctx.canvas);
     if (this.toolNow in this.tools) {
-      e.preventDefault();
-      if (e.target == this.opctx.canvas)
-        return this.tools[this.toolNow].onDown(getMouseDOM(e, this.oppos));
-    }
-    else {
-      return console.log("Tool", this.toolNow, "doens't exist");
+      if (e.target == this.opctx.canvas) {
+        e.preventDefault();
+        this.tools[this.toolNow].onDown(getMouseDOM(e, this.oppos));
+      }
     }
   };
 
   Painter.prototype.onMove = function(e) {
     this.oppos = getDOMpos(this.opctx.canvas);
+    e.preventDefault();
     if (this.toolNow in this.tools) {
-      e.preventDefault();
-      return this.tools[this.toolNow].onMove(getMouseDOM(e, this.oppos));
-    }
-    else {
-      return console.log("Tool", this.toolNow, "doens't exist");
+      this.tools[this.toolNow].onMove(getMouseDOM(e, this.oppos));
     }
   };
 
@@ -50,33 +53,61 @@ Painter = (function() {
     this.oppos = getDOMpos(this.opctx.canvas);
     if (this.toolNow in this.tools) {
       e.preventDefault();
-      return this.tools[this.toolNow].onUp(getMouseDOM(e, this.oppos));
-    }
-    else {
-      return console.log("Tool", this.toolNow, "doens't exist");
+      this.tools[this.toolNow].onUp(getMouseDOM(e, this.oppos));
     }
   };
 
+  Painter.prototype.shiftDown = function() {
+    console.log("shift down");
+    if (this.toolNow in this.tools) {
+      this.tools[this.toolNow].shiftDown();
+    }
+  }
+
+  Painter.prototype.shiftUp = function() {
+    console.log("shift up");
+    if (this.toolNow in this.tools) {
+      this.tools[this.toolNow].shiftUp();
+    }
+  }
+
   Painter.prototype.registerTool = function(toolname, tool) {
-    return this.tools[toolname] = new tool(this, this.opctx, this.dctx);
+    return this.tools[toolname] = new tool(this, this.opctx, this.bctx,
+                                           this.dctx);
   };
 
   Painter.prototype.changeTool = function(toolname) {
     if (toolname in this.tools) {
+      if (this.tools[this.toolNow])
+        this.tools[this.toolNow].finish();
       this.toolNow = toolname;
+      this.tools[toolname].init();
+    }
+    else {
+      console.log("Tool doesn't exist");
     }
   };
 
+  Painter.prototype.getStyle = function() {
+    // implement by user
+  }
+
   Painter.prototype.setFrontColor = function(color) {
-    this.dctx.strokeStyle = getStyle(color);
+    this.dctx.strokeStyle = color;
+    this.bctx.strokeStyle = color;
   };
 
   Painter.prototype.setBackColor = function(color) {
-    this.dctx.fillStyle = getStyle(color);
+    this.dctx.fillStyle = color;
+    this.bctx.fillStyle = color;
   };
 
+  Painter.prototype.setLineWidth = function(width) {
+    this.dctx.lineWidth = width;
+    this.bctx.lineWidth = width;
+  }
+
   Painter.prototype.undo = function() {
-    this.clear();
     if (this.his.length) {
       this.dctx.putImageData(this.his.pop(), 0, 0);
     }
@@ -91,7 +122,6 @@ Painter = (function() {
   };
 
   Painter.prototype.clear = function() {
-    this.addHis();
     this.dctx.clearRect(0, 0,
                         this.dctx.canvas.width, this.dctx.canvas.height);
   };

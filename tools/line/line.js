@@ -1,8 +1,8 @@
 'use strict';
 
-var Pencil;
+var Line;
 
-Pencil = (function() {
+Line = (function() {
   var Tool = function(painter, opctx, bctx, dctx) {
     this.painter = painter;
     this.opctx = opctx;
@@ -23,34 +23,38 @@ Pencil = (function() {
   Tool.prototype.onDown = function(pos) {
     this.painter.addHis();
     this.isDown = true;
-    this.bctx.beginPath();
-    this.bctx.moveTo(pos.x, pos.y);
-    this.dctx.beginPath();
-    this.dctx.moveTo(pos.x, pos.y);
+    this.from = pos;
+    this.to = pos;
   }
 
   Tool.prototype.onMove = function(pos) {
     this.opctx.clear();
     if (this.isDown) {
+      this.to = pos;
       this.bctx.clear();
-      this.bctx.lineTo(pos.x, pos.y);
+      this.bctx.beginPath();
+      this.bctx.moveTo(this.from.x, this.from.y);
+      this.bctx.lineTo(this.to.x, this.to.y);
       this.bctx.stroke();
-      this.dctx.lineTo(pos.x, pos.y);
     }
   }
 
   Tool.prototype.onUp = function(pos) {
     if (this.isDown) {
       this.bctx.clear();
-      this.dctx.lineTo(pos.x, pos.y);
-      this.dctx.stroke();
       this.dctx.beginPath();
+      this.dctx.moveTo(this.from.x, this.from.y);
+      this.dctx.lineTo(this.to.x, this.to.y);
+      this.dctx.stroke();
       this.isDown = false;
     }
   }
 
-  Tool.prototype.shiftDown = function() {}
-  Tool.prototype.shiftUp = function() {}
+  Tool.prototype.shiftDown = function() {
+  }
+
+  Tool.prototype.shiftUp = function() {
+  }
 
   Tool.prototype.finish = function() {}
 
