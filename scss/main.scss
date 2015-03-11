@@ -42,7 +42,7 @@ body {
 }
 
 #main {
-  flex-grow: 1;
+  flex: 1 1 auto;
   display: flex;
 }
 
@@ -93,13 +93,16 @@ body {
   background-color: $grey-bg;
   flex: 5 0 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  /* justify-content: center; */
+  /* align-items: center; */
+  justify-content: stretch;
+  align-items: stretch;
+  position: relative;
 
   #drawarea {
-    position: relative;
-    height: 400px;
-    width: 600px;
+    /* position: relative; */
+    /* height: 100%; */
+    /* width: 100%; */
     .layer {
       position: absolute;
       height: 100%;

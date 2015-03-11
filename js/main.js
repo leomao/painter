@@ -15,8 +15,9 @@ document.addEventListener('DOMContentLoaded', function() {
                             ddom.getContext('2d'));
 
   painter.registerTool("pencil", Pencil);
-  painter.registerTool("rect", Rect);
   painter.registerTool("line", Line);
+  painter.registerTool("rect", Rect);
+  painter.registerTool("ellipse", Ellipse);
 
   var tools = document.querySelectorAll('#tools .tool');
   tools = Array.prototype.slice.call(tools);
@@ -104,7 +105,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var container = document.getElementById('container'); // operation
   container.addEventListener("mousedown", painter.onDown);
-  container.addEventListener("mousemove", painter.onMove);
   container.addEventListener("mouseup", painter.onUp);
   window.addEventListener("keydown", function(e) {
     if (e.shiftKey)

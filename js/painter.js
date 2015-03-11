@@ -37,6 +37,7 @@ Painter = (function() {
       if (e.target == this.opctx.canvas) {
         e.preventDefault();
         this.tools[this.toolNow].onDown(getMouseDOM(e, this.oppos));
+        window.addEventListener("mousemove", this.onMove);
       }
     }
   };
@@ -54,6 +55,7 @@ Painter = (function() {
     if (this.toolNow in this.tools) {
       e.preventDefault();
       this.tools[this.toolNow].onUp(getMouseDOM(e, this.oppos));
+      window.removeEventListener("mousemove", this.onMove);
     }
   };
 
