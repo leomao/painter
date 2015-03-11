@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <title>Simple Painter</title>
   <link rel="stylesheet" type="text/css" href="css/normalize.css">
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="css/font-awesome/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="css/main.css">
 
 </head>
@@ -12,6 +12,9 @@
   <nav id="nav">
     <div></div>
     <div id="tools">
+      <span class="tool" data-tool="select">
+        <img src="tools/select/select.svg" />
+      </span>
       <span class="tool fa fa-pencil" data-tool="pencil"></span>
       <span class="tool" data-tool="line">
         <img src="tools/line/line.svg" />
@@ -23,12 +26,13 @@
         <img src="tools/ellipse/ellipse.svg" />
       </span>
       <span class="tool" data-tool="paintbucket">
-        <img src="" />
+        <img src="img/fi-paint-bucket.svg" />
       </span>
     </div>
     <div>
       <span class="tool fa fa-undo" id="undo-button"></span>
       <span class="tool fa fa-refresh" id="refresh-button"></span>
+      <a class="tool fa fa-cloud-download" id="download-button"></a>
     </div>
   </nav>
   <div id="main">

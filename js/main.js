@@ -14,11 +14,11 @@ document.addEventListener('DOMContentLoaded', function() {
   var painter = new Painter(opdom.getContext('2d'), bdom.getContext('2d'),
                             ddom.getContext('2d'));
 
-  painter.registerTool("pencil", Pencil);
-  painter.registerTool("line", Line);
-  painter.registerTool("rect", Rect);
-  painter.registerTool("ellipse", Ellipse);
-  painter.registerTool("paintbucket", PaintBucket);
+  painter.registerTool("pencil", pPencil);
+  painter.registerTool("line", pLine);
+  painter.registerTool("rect", pRect);
+  painter.registerTool("ellipse", pEllipse);
+  painter.registerTool("paintbucket", pPaintBucket);
 
   var tools = document.querySelectorAll('#tools .tool');
   tools = Array.prototype.slice.call(tools);
@@ -36,6 +36,13 @@ document.addEventListener('DOMContentLoaded', function() {
       painter.changeTool(this.dataset.tool);
     });
   }
+
+  var downloadButton = document.querySelector('#download-button');
+  downloadButton.addEventListener("click", function(e) {
+    console.log("TEST");
+    this.href = ddom.toDataURL();
+    this.download = 'paint.png';
+  });
 
   var refreshButton = document.querySelector('#refresh-button');
   refreshButton.addEventListener("click", function(e) {
@@ -74,7 +81,6 @@ document.addEventListener('DOMContentLoaded', function() {
     renderCallback: function($elm, toggled) {
       painter.getStyle();
     },
-    // toggled true/false can for example be used to check if the $elm has a certain className and then hide alpha,...
     buidCallback: function($elm) {}, // this === instance; $elm: the UI
     scrollResize: true, // toggle for reposition colorPicker on window.resize/scroll
     gap: 4, // gap to right and bottom edge of view port if repositioned to fit
@@ -88,11 +94,11 @@ document.addEventListener('DOMContentLoaded', function() {
     renderCallback: function($elm, toggled) {
       painter.getStyle();
     },
-    buidCallback: function($elm) {}, // this === instance; $elm: the UI
-    scrollResize: true, // toggle for reposition colorPicker on window.resize/scroll
-    gap: 4, // gap to right and bottom edge of view port if repositioned to fit
-    preventFocus: false, // prevents default on focus of input fields (e.g. no keyboard on mobile)
-    body: document.body, // the element where the events are attached to (touchstart, mousedown, pointerdown, focus, click, change)
+    buidCallback: function($elm) {},
+    scrollResize: true,
+    gap: 4,
+    preventFocus: false,
+    body: document.body,
   });
 
   painter.getStyle = function() {
@@ -115,5 +121,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!e.shiftKey)
       painter.shiftUp();
   });
+
 
 });

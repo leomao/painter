@@ -1,8 +1,8 @@
 'use strict';
 
-var Ellipse;
+var pEllipse;
 
-Ellipse = (function() {
+pEllipse = (function() {
   var Tool = function(painter, opctx, bctx, dctx) {
     this.painter = painter;
     this.opctx = opctx;

@@ -1,8 +1,8 @@
 'use strict';
 
-var Pencil;
+var pPencil;
 
-Pencil = (function() {
+pPencil = (function() {
   var Tool = function(painter, opctx, bctx, dctx) {
     this.painter = painter;
     this.opctx = opctx;

@@ -1,8 +1,8 @@
 'use strict';
 
-var PaintBucket;
+var pPaintBucket;
 
-PaintBucket = (function() {
+pPaintBucket = (function() {
   var Tool = function(painter, opctx, bctx, dctx) {
     this.painter = painter;
     this.opctx = opctx;

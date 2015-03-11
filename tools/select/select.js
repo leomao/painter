@@ -1,8 +1,8 @@
 'use strict';
 
-var pRect;
+var pSelect;
 
-pRect = (function() {
+pSelect = (function() {
   var Tool = function(painter, opctx, bctx, dctx) {
     this.painter = painter;
     this.opctx = opctx;
@@ -10,6 +10,7 @@ pRect = (function() {
     this.dctx = dctx;
     this.isDown = false;
     this.fixside = false;
+    this.isSelected = false;
     this.getPos = function(pos) {
       if (this.fixside) {
         var d = pos.subtract(this.from);
@@ -23,18 +24,18 @@ pRect = (function() {
 
   Tool.prototype.init = function() {
     this.opctx.lineCap = "butt";
-    this.opctx.lineJoin = "round";
-    this.bctx.lineCap = "butt";
-    this.bctx.lineJoin = "square";
-    this.dctx.lineCap = "butt";
-    this.dctx.lineJoin = "square";
+    this.opctx.lineJoin = "butt";
   }
 
   Tool.prototype.onDown = function(pos) {
-    this.painter.addHis();
-    this.isDown = true;
-    this.from = pos;
-    this.to = pos;
+    if (this.isSelected) {
+      this.isDown = true;
+    }
+    else {
+      this.isDown = true;
+      this.from = pos;
+      this.to = pos;
+    }
   }
 
   Tool.prototype.onMove = function(pos) {
@@ -43,7 +44,6 @@ pRect = (function() {
       this.to = this.getPos(pos);
       this.bctx.clear();
       var d = this.to.subtract(this.from);
-      this.bctx.fillRect(this.from.x, this.from.y, d.x, d.y);
       this.bctx.strokeRect(this.from.x, this.from.y, d.x, d.y);
     }
   }
@@ -51,10 +51,7 @@ pRect = (function() {
   Tool.prototype.onUp = function(pos) {
     if (this.isDown) {
       this.bctx.clear();
-      var d = this.to.subtract(this.from);
-      this.dctx.fillRect(this.from.x, this.from.y, d.x, d.y);
-      this.dctx.strokeRect(this.from.x, this.from.y, d.x, d.y);
-      this.isDown = false;
+      this.isSelected = true;
     }
   }
 
