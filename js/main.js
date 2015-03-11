@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', function() {
   painter.registerTool("line", Line);
   painter.registerTool("rect", Rect);
   painter.registerTool("ellipse", Ellipse);
+  painter.registerTool("paintbucket", PaintBucket);
 
   var tools = document.querySelectorAll('#tools .tool');
   tools = Array.prototype.slice.call(tools);
