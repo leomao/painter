@@ -1,8 +1,8 @@
 'use strict';
 
-var pSelect;
+var pRectSelect;
 
-pSelect = (function() {
+pRectSelect = (function() {
   var Tool = function(painter, opctx, bctx, dctx) {
     this.painter = painter;
     this.opctx = opctx;
@@ -34,13 +34,13 @@ pSelect = (function() {
     this.drawFrame = function(lefttop, size) {
       this.opctx.clear();
       this.opctx.strokeStyle = 'white';
+      this.opctx.lineDashOffset = 0;
       this.opctx.strokeRect(lefttop.x, lefttop.y,
                             size.x, size.y);
       this.opctx.strokeStyle = 'black';
       this.opctx.lineDashOffset = 10;
       this.opctx.strokeRect(lefttop.x, lefttop.y,
                             size.x, size.y);
-      this.opctx.lineDashOffset = 0;
     }
     this.putDown = function() {
       this.dctx.drawImage(this.bctx.canvas, 0, 0);

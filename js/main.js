@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
   var painter = new Painter(opdom.getContext('2d'), bdom.getContext('2d'),
                             ddom.getContext('2d'));
 
-  painter.registerTool("select", pSelect);
+  painter.registerTool("rectselect", pRectSelect);
+  painter.registerTool("ellipseselect", pEllipseSelect);
   painter.registerTool("pencil", pPencil);
   painter.registerTool("line", pLine);
   painter.registerTool("rect", pRect);

@@ -17,9 +17,6 @@ pEllipse = (function() {
       }
       return pos;
     }
-    this.center = new Point(0, 0);
-    this.rx = 0;
-    this.ry = 0;
     this.calParam = function() {
       this.center.x = (this.from.x + this.to.x) / 2;
       this.center.y = (this.from.y + this.to.y) / 2;
@@ -37,6 +34,9 @@ pEllipse = (function() {
     this.dctx.lineJoin = "round";
     this.isDown = false;
     this.fixside = false;
+    this.center = new Point(0, 0);
+    this.rx = 0;
+    this.ry = 0;
   }
 
   Tool.prototype.onDown = function(pos) {
