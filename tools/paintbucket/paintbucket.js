@@ -31,6 +31,10 @@ pPaintBucket = (function() {
         b: img.data[i+2],
         a: img.data[i+3]
       };
+      if (origin.r == rgba.r && origin.g == rgba.g && origin.b == rgba.b
+          && origin.a == rgba.a) {
+        return;
+      }
       img.data[i] = rgba.r;
       img.data[i+1] = rgba.g;
       img.data[i+2] = rgba.b;
