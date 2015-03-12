@@ -8,11 +8,6 @@ pSelect = (function() {
     this.opctx = opctx;
     this.bctx = bctx;
     this.dctx = dctx;
-    this.isDown = false;
-    this.fixside = false;
-    this.isSelected = false;
-    this.lefttop = new Point(0, 0);
-    this.rightbottom = new Point(0, 0);
     this.getPos = function(pos) {
       if (this.fixside) {
         var d = pos.subtract(this.from);
@@ -47,6 +42,10 @@ pSelect = (function() {
                             size.x, size.y);
       this.opctx.lineDashOffset = 0;
     }
+    this.putDown = function() {
+      this.dctx.drawImage(this.bctx.canvas, 0, 0);
+      this.bctx.clear();
+    }
   }
 
   Tool.prototype.init = function() {
@@ -55,6 +54,12 @@ pSelect = (function() {
     this.opctx.lineJoin = "butt";
     this.opctx.lineWidth = 2;
     this.opctx.setLineDash([10, 10]);
+    this.isDown = false;
+    this.fixside = false;
+    this.isSelected = false;
+    this.lefttop = new Point(0, 0);
+    this.rightbottom = new Point(0, 0);
+    this.isMoved = false;
   }
 
   Tool.prototype.onDown = function(pos) {
@@ -63,16 +68,20 @@ pSelect = (function() {
       this.mfrom = pos;
       this.bctx.clear();
       this.bctx.putImageData(this.sdata, this.lefttop.x, this.lefttop.y);
-      this.dctx.clearRect(this.lefttop.x, this.lefttop.y,
-                          this.size.x, this.size.y);
+      if (!this.isMoved) {
+        this.isMoved = true;
+        this.painter.addHis();
+        this.dctx.clearRect(this.lefttop.x, this.lefttop.y,
+                            this.size.x, this.size.y);
+      }
     }
     else {
       this.opctx.clear();
       if (this.isSelected) {
-        this.bctx.clear();
-        this.dctx.putImageData(this.sdata, this.lefttop.x, this.lefttop.y);
+        this.putDown();
       }
       this.isSelected = false;
+      this.isMoved = false;
       this.isDown = true;
       this.from = pos;
       this.to = pos;
@@ -88,7 +97,6 @@ pSelect = (function() {
         this.drawFrame(lefttop, this.size);
         this.bctx.clear();
         this.bctx.putImageData(this.sdata, lefttop.x, lefttop.y);
-
       }
       else {
         this.to = this.getPos(pos);
@@ -114,7 +122,7 @@ pSelect = (function() {
           return;
         }
         this.isSelected = true;
-        this.sdata = this.dctx.getImageData(this.from.x, this.from.y,
+        this.sdata = this.dctx.getImageData(this.lefttop.x, this.lefttop.y,
                                             this.size.x, this.size.y);
       }
     }
@@ -129,6 +137,7 @@ pSelect = (function() {
   }
 
   Tool.prototype.finish = function() {
+    this.putDown();
     this.opctx.restore();
   }
 

@@ -8,8 +8,6 @@ pPaintBucket = (function() {
     this.opctx = opctx;
     this.bctx = bctx;
     this.dctx = dctx;
-    this.isDown = false;
-    this.fixside = false;
     this.fillAround = function(img, pos) {
       var w = this.dctx.canvas.width;
       var h = this.dctx.canvas.height;
@@ -85,6 +83,8 @@ pPaintBucket = (function() {
   }
 
   Tool.prototype.init = function() {
+    this.isDown = false;
+    this.fixside = false;
   }
 
   Tool.prototype.onDown = function(pos) {

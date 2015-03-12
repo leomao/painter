@@ -82,6 +82,7 @@ Painter = (function() {
 
   Painter.prototype.changeTool = function(toolname) {
     if (toolname in this.tools) {
+      this.opctx.clear();
       if (this.tools[this.toolNow])
         this.tools[this.toolNow].finish();
       this.toolNow = toolname;
@@ -112,6 +113,7 @@ Painter = (function() {
   }
 
   Painter.prototype.undo = function() {
+    this.changeTool(this.toolNow);
     if (this.his.length) {
       this.dctx.putImageData(this.his.pop(), 0, 0);
     }

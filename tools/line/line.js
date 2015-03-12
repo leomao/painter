@@ -7,7 +7,6 @@ pLine = (function() {
     this.opctx = opctx;
     this.bctx = bctx;
     this.dctx = dctx;
-    this.isDown = false;
   }
 
   Tool.prototype.init = function() {
@@ -17,6 +16,7 @@ pLine = (function() {
     this.bctx.lineJoin = "round";
     this.dctx.lineCap = "round";
     this.dctx.lineJoin = "round";
+    this.isDown = false;
   }
 
   Tool.prototype.onDown = function(pos) {

@@ -8,8 +8,6 @@ pRect = (function() {
     this.opctx = opctx;
     this.bctx = bctx;
     this.dctx = dctx;
-    this.isDown = false;
-    this.fixside = false;
     this.getPos = function(pos) {
       if (this.fixside) {
         var d = pos.subtract(this.from);
@@ -28,6 +26,8 @@ pRect = (function() {
     this.bctx.lineJoin = "square";
     this.dctx.lineCap = "butt";
     this.dctx.lineJoin = "square";
+    this.isDown = false;
+    this.fixside = false;
   }
 
   Tool.prototype.onDown = function(pos) {

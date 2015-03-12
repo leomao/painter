@@ -8,8 +8,6 @@ pEllipse = (function() {
     this.opctx = opctx;
     this.bctx = bctx;
     this.dctx = dctx;
-    this.isDown = false;
-    this.fixside = false;
     this.getPos = function(pos) {
       if (this.fixside) {
         var d = pos.subtract(this.from);
@@ -37,6 +35,8 @@ pEllipse = (function() {
     this.bctx.lineJoin = "round";
     this.dctx.lineCap = "round";
     this.dctx.lineJoin = "round";
+    this.isDown = false;
+    this.fixside = false;
   }
 
   Tool.prototype.onDown = function(pos) {
