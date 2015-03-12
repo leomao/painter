@@ -38,6 +38,7 @@ Painter = (function() {
         e.preventDefault();
         this.tools[this.toolNow].onDown(getMouseDOM(e, this.oppos));
         window.addEventListener("mousemove", this.onMove);
+        window.addEventListener("mouseup", this.onUp);
       }
     }
   };
@@ -56,6 +57,7 @@ Painter = (function() {
       e.preventDefault();
       this.tools[this.toolNow].onUp(getMouseDOM(e, this.oppos));
       window.removeEventListener("mousemove", this.onMove);
+      window.removeEventListener("mouseup", this.onUp);
     }
   };
 

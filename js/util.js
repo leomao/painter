@@ -6,12 +6,26 @@ var Point = (function() {
     this.y = y1;
   }
 
+  Point.prototype.add = function(p) {
+    return new Point(this.x + p.x, this.y + p.y);
+  }
+
   Point.prototype.subtract = function(p) {
     return new Point(this.x - p.x, this.y - p.y);
   }
 
   return Point;
 })();
+
+var addPoint = function(p, a, b) {
+  p.x = a.x + b.x;
+  p.y = a.y + b.y;
+}
+
+var subtractPoint = function(p, a, b) {
+  p.x = a.x - b.x;
+  p.y = a.y - b.y;
+}
 
 var getMouseDOM = function(e, dompos) {
   var dompos, x, y;

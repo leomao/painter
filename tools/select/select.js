@@ -11,6 +11,8 @@ pSelect = (function() {
     this.isDown = false;
     this.fixside = false;
     this.isSelected = false;
+    this.lefttop = new Point(0, 0);
+    this.rightbottom = new Point(0, 0);
     this.getPos = function(pos) {
       if (this.fixside) {
         var d = pos.subtract(this.from);
@@ -20,13 +22,31 @@ pSelect = (function() {
       }
       return pos;
     }
+    this.getPoint = function() {
+      this.lefttop.x = Math.min(this.from.x, this.to.x);
+      this.lefttop.y = Math.min(this.from.y, this.to.y);
+      this.rightbottom.x = Math.max(this.from.x, this.to.x);
+      this.rightbottom.y = Math.max(this.from.y, this.to.y);
+      this.size = this.rightbottom.subtract(this.lefttop);
+    }
     this.inSelect = function(pos) {
-      var w = this.opctx.canvas.width;
-      var h = this.opctx.canvas.width;
-      var tw = Math.abs(this.from.x - pos.x) + Math.abs(this.to.x - pos.x);
-      var th = Math.abs(this.from.y - pos.y) + Math.abs(this.to.y - pos.y);
-      return (tw <= w && th <= h);
-    }  
+      var tw = Math.abs(this.lefttop.x - pos.x)
+        + Math.abs(this.rightbottom.x - pos.x);
+      var th = Math.abs(this.lefttop.y - pos.y)
+        + Math.abs(this.rightbottom.y - pos.y);
+      return (tw == this.size.x && th == this.size.y);
+    }
+    this.drawFrame = function(lefttop, size) {
+      this.opctx.clear();
+      this.opctx.strokeStyle = 'white';
+      this.opctx.strokeRect(lefttop.x, lefttop.y,
+                            size.x, size.y);
+      this.opctx.strokeStyle = 'black';
+      this.opctx.lineDashOffset = 10;
+      this.opctx.strokeRect(lefttop.x, lefttop.y,
+                            size.x, size.y);
+      this.opctx.lineDashOffset = 0;
+    }
   }
 
   Tool.prototype.init = function() {
@@ -34,16 +54,24 @@ pSelect = (function() {
     this.opctx.lineCap = "butt";
     this.opctx.lineJoin = "butt";
     this.opctx.lineWidth = 2;
+    this.opctx.setLineDash([10, 10]);
   }
 
   Tool.prototype.onDown = function(pos) {
     if (this.isSelected && this.inSelect(pos)) {
-      console.log("inside");
       this.isDown = true;
       this.mfrom = pos;
+      this.bctx.clear();
+      this.bctx.putImageData(this.sdata, this.lefttop.x, this.lefttop.y);
+      this.dctx.clearRect(this.lefttop.x, this.lefttop.y,
+                          this.size.x, this.size.y);
     }
     else {
       this.opctx.clear();
+      if (this.isSelected) {
+        this.bctx.clear();
+        this.dctx.putImageData(this.sdata, this.lefttop.x, this.lefttop.y);
+      }
       this.isSelected = false;
       this.isDown = true;
       this.from = pos;
@@ -55,16 +83,17 @@ pSelect = (function() {
     if (this.isDown) {
       if (this.isSelected) {
         this.mto = pos;
+        var md = this.mto.subtract(this.mfrom);
+        var lefttop = this.lefttop.add(md);
+        this.drawFrame(lefttop, this.size);
+        this.bctx.clear();
+        this.bctx.putImageData(this.sdata, lefttop.x, lefttop.y);
+
       }
       else {
         this.to = this.getPos(pos);
-        this.opctx.clear();
-        var d = this.to.subtract(this.from);
-        this.opctx.strokeStyle = 'white';
-        this.opctx.strokeRect(this.from.x, this.from.y, d.x, d.y);
-        this.opctx.strokeStyle = 'black';
-        this.opctx.strokeRect(this.from.x-2, this.from.y-2, d.x+4, d.y+4);
-        this.opctx.strokeRect(this.from.x+2, this.from.y+2, d.x-4, d.y-4);
+        this.getPoint();
+        this.drawFrame(this.lefttop, this.size);
       }
     }
   }
@@ -72,17 +101,19 @@ pSelect = (function() {
   Tool.prototype.onUp = function(pos) {
     if (this.isDown) {
       if (this.isSelected) {
-
+        var md = this.mto.subtract(this.mfrom);
+        addPoint(this.lefttop, this.lefttop, md);
+        addPoint(this.rightbottom, this.lefttop, this.size);
+        this.drawFrame(this.lefttop, this.size);
+        this.bctx.clear();
+        this.bctx.putImageData(this.sdata, this.lefttop.x, this.lefttop.y);
       }
       else {
+        if (this.size.x == 0 || this.size.y == 0) {
+          this.isSelected = false;
+          return;
+        }
         this.isSelected = true;
-        var from = this.from;
-        var to = this.to;
-        this.from.x = Math.min(from.x, to.x);
-        this.from.y = Math.min(from.y, to.y);
-        this.to.x = Math.max(from.x, to.x);
-        this.to.y = Math.max(from.y, to.y);
-        this.size = this.to.subtract(this.from);
         this.sdata = this.dctx.getImageData(this.from.x, this.from.y,
                                             this.size.x, this.size.y);
       }

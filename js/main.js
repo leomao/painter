@@ -113,7 +113,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   var container = document.getElementById('container'); // operation
   container.addEventListener("mousedown", painter.onDown);
-  container.addEventListener("mouseup", painter.onUp);
   window.addEventListener("keydown", function(e) {
     if (e.shiftKey)
       painter.shiftDown();
